@@ -22,18 +22,20 @@ var update_needed: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	print("HexGridChunk on Ready")
 	add_child(_hex_mesh)
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+#func _process(delta: float) -> void:
+#	pass
 	
 #endregion
 
 #region Public methods
 
-func add_cell (index: int, cell: HexCell) -> void:
+#func add_cell (index: int, cell: HexCell) -> void:
+func add_cell (cell: HexCell) -> void:
 	#Set the hex chunk reference on the hex cell object
 	cell.hex_chunk = self
 	

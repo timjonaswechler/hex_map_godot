@@ -9,14 +9,14 @@ extends Node3D
 ## This is the number of chunks in the y-direction of the hex grid
 @export var chunk_count_z: int = 2
 
-## This is the scene that will be used for each hex cell in the grid
-@export var hex_cell_prefab: PackedScene
-
 ## This is the default color for each hex in the grid
-@export var default_hex_color: Color
+@export var default_hex_color:= Color("fc0fc0", 1.0)
 
 ## This is the default ShaderMaterial that will be used for the hex cell's mesh
-@export var hex_shader_material: ShaderMaterial
+@export var hex_shader_material: ShaderMaterial = preload("res://shader/hex_cell_shader_res.tres")
+
+## This is the scene that will be used for each hex cell in the grid
+@export var hex_cell_prefab: PackedScene = preload("res://scenes/hex_cell.tscn")
 
 #endregion
 
@@ -42,6 +42,7 @@ var _cell_count_z: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	print("HexGrid on Ready")
 	#Set the seed of the random number generator
 	_rng.set_seed(1)
 	
@@ -61,7 +62,8 @@ func _ready() -> void:
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+#func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	for i in range(0, len(_hex_grid_chunks)):
 		var current_chunk: HexGridChunk = _hex_grid_chunks[i]
 		if (current_chunk.update_needed):
@@ -71,9 +73,9 @@ func _process(delta: float) -> void:
 
 #region Public methods
 
-func get_cell (position: Vector3) -> HexCell:
+func get_cell (_position: Vector3) -> HexCell:
 	#Convert the global position to a position within the hex grid
-	var inverse_transform_point = position * global_transform
+	var inverse_transform_point = _position * global_transform
 	
 	#Convert the position in the hex grid to a set of coordinates within the hex grid
 	var coordinates: HexCoordinates = HexCoordinates.FromPosition(inverse_transform_point)
@@ -125,10 +127,11 @@ func _create_cells () -> void:
 func _create_cell(z: int, x: int, i: int) -> void:
 	#Create a Vector3 to store the new hex's position
 	var hex_position: Vector3 = Vector3(
-		(x + z * 0.5 - (z / 2)) * (HexMetrics.INNER_RADIUS * 2.0), 
+		(x + z * 0.5 - int(z / 2.0)) * (HexMetrics.INNER_RADIUS * 2.0), 
 		0.0, 
 		z * (HexMetrics.OUTER_RADIUS * 1.5)
 	)
+	print(hex_position)
 	
 	#Instantiate a hex cell object
 	var hex_cell: HexCell = hex_cell_prefab.instantiate() as HexCell
@@ -177,6 +180,7 @@ func _create_cell(z: int, x: int, i: int) -> void:
 	
 	#Set the coordinates of the hex cell within the grid
 	hex_cell.hex_coordinates = HexCoordinates.FromOffsetCoordinates(x, z)
+	print(hex_cell.hex_coordinates)
 	
 	#Set the coordinates/position label on the hex cell
 	hex_cell.position_label.text = str(hex_cell.hex_coordinates)
@@ -188,24 +192,25 @@ func _create_cell(z: int, x: int, i: int) -> void:
 	_add_cell_to_chunk(x, z, hex_cell)
 
 func _add_cell_to_chunk (x: int, z: int, cell: HexCell) -> void:
-	var chunk_x: int = x / HexMetrics.CHUNK_SIZE_X
-	var chunk_z: int = z / HexMetrics.CHUNK_SIZE_Z
+	var chunk_x: int = int(float(x) / float(HexMetrics.CHUNK_SIZE_X))
+	var chunk_z: int = int(float(z) / float(HexMetrics.CHUNK_SIZE_Z))
 	
 	var chunk_index: int = chunk_x + chunk_z * chunk_count_x
 	var chunk: HexGridChunk = _hex_grid_chunks[chunk_index]
 	
 	if (chunk_index == 0):
-		cell.hex_color = Color.YELLOW
+		cell.hex_color = _hex_colors[0]
 	elif (chunk_index == 1):
-		cell.hex_color = Color.GREEN
+		cell.hex_color = _hex_colors[1]
 	elif (chunk_index == 2):
-		cell.hex_color = Color.BLUE
+		cell.hex_color = _hex_colors[2]
 	elif (chunk_index == 3):
-		cell.hex_color = Color.WHITE
+		cell.hex_color = _hex_colors[3]
 	
-	var local_x: int = x - chunk_x * HexMetrics.CHUNK_SIZE_X
-	var local_z: int = z - chunk_z * HexMetrics.CHUNK_SIZE_Z
+	# local coordinates in the chunk 
+	#var local_x: int = x - chunk_x * HexMetrics.CHUNK_SIZE_X
+	#var local_z: int = z - chunk_z * HexMetrics.CHUNK_SIZE_Z
 	
-	chunk.add_cell(local_x + local_z * HexMetrics.CHUNK_SIZE_X, cell)
+	chunk.add_cell(cell)
 
 #endregion

@@ -33,13 +33,14 @@ var active_elevation: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	print("Main on Ready")
 	RenderingServer.set_debug_generate_wireframes(true)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	var left_right_movement = Input.get_axis("ui_left", "ui_right")
-	var up_down_movement = Input.get_axis("ui_up", "ui_down")
+func _process(_delta: float) -> void:
+	var _left_right_movement = Input.get_axis("ui_left", "ui_right")
+	var _up_down_movement = Input.get_axis("ui_up", "ui_down")
 	
 	#scene_camera.position.x += camera_speed * left_right_movement
 	#scene_camera.position.z += camera_speed * up_down_movement
@@ -64,9 +65,10 @@ func _input(event: InputEvent) -> void:
 			#vp.debug_draw = (vp.debug_draw + 1) % 5
 	elif event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_LEFT:
-			var RAY_LENGTH = 1000
-			var space_state = get_world_3d().direct_space_state
-			var mousepos = get_viewport().get_mouse_position()
+			print("Mouse pressed")
+			#var RAY_LENGTH = 1000
+			#var space_state = get_world_3d().direct_space_state
+			#var mousepos = get_viewport().get_mouse_position()
 
 			#var origin = scene_camera.project_ray_origin(mousepos)
 			#var end = origin + scene_camera.project_ray_normal(mousepos) * RAY_LENGTH

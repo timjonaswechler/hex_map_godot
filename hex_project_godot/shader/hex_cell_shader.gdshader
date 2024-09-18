@@ -6,6 +6,7 @@ void vertex() {
 
 void fragment() {
 	ALBEDO = vec3(COLOR.r, COLOR.g, COLOR.b);
+	ALPHA = float(COLOR.a);
 }
 
 //void light() {

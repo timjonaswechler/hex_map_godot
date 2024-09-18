@@ -5,12 +5,13 @@ extends MeshInstance3D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	print("HexMesh on Ready")
 	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+#func _process(delta: float) -> void:
+#	pass
 	
 #endregion
 
@@ -33,7 +34,8 @@ func triangulate_cells (cells: Array[HexCell], mat: ShaderMaterial) -> void:
 	surface_tool.generate_normals()
 	
 	#Generate the tangents for the mesh
-	surface_tool.generate_tangents()
+	#Needed if textures are used 
+	#surface_tool.generate_tangents()
 	
 	#Commit the mesh
 	self.mesh = surface_tool.commit()

@@ -6,24 +6,19 @@ enum HexDirections { NE, E, SE, SW, W, NW }
 
 #endregion
 
-#region Statc methods
+#region Static methods
 
-static func opposite (direction: HexDirections) -> HexDirections:
-	if int(direction) < 3:
-		return int(direction) + 3
-	else:
-		return int(direction) - 3
+static func opposite(direction: HexDirections) -> int:
+	var opposite_direction = (int(direction) + 3) % 6
+	return opposite_direction
+	
 
-static func previous (direction: HexDirections) -> HexDirections:
-	if (direction == HexDirections.NE):
-		return HexDirections.NW
-	else:
-		return direction - 1
+static func previous(direction: HexDirections) -> int:
+	var previous_direction = (int(direction) - 1 + 6) % 6
+	return previous_direction
 
-static func next (direction: HexDirections) -> HexDirections:
-	if (direction == HexDirections.NW):
-		return HexDirections.NE
-	else:
-		return direction + 1
+static func next(direction: HexDirections) -> int:
+	var next_direction = (int(direction) + 1) % 6
+	return next_direction
 
 #endregion

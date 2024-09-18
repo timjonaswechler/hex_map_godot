@@ -11,9 +11,7 @@ extends Node3D
 @export var movement_speed_max_zoom : float = 10
 @export var rotation_speed : float = 180
 
-
-@export var hex_grid : HexGrid
-
+#@export var hex_grid : HexGrid
 #endregion
 
 #region Private data members
@@ -21,6 +19,7 @@ extends Node3D
 @onready var _swivel := $Swivel
 @onready var _stick := $Swivel/Stick
 @onready var _main_camera := $Swivel/Stick/MainCamera
+
 
 var _zoom: float = 1.0
 var _movement_speed: float = 25
@@ -32,6 +31,7 @@ var _rotation_angle: float = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	print("HexMapCamera on Ready")
 	_main_camera.make_current()
 
 
@@ -43,7 +43,7 @@ func _process(delta: float) -> void:
 	if (left_right_movement != 0.0 || forward_back_movement != 0.0):
 		_adjust_position(left_right_movement, forward_back_movement, delta)
 	
-	var rotate_up_down_movement = Input.get_axis("ui_rotate_down", "ui_rotate_up")
+	var _rotate_up_down_movement = Input.get_axis("ui_rotate_down", "ui_rotate_up")
 	var rotate_left_right_movement = Input.get_axis("ui_rotate_left", "ui_rotate_right")
 
 	if (rotate_left_right_movement != 0.0):
@@ -83,14 +83,14 @@ func _adjust_position (x_delta: float, z_delta: float, time_delta: float) -> voi
 	position += direction * distance
 	#position = _clamp_position(position)
 
-func _clamp_position (pos: Vector3) -> Vector3:
-	var x_max: float = (hex_grid.chunk_count_x * HexMetrics.CHUNK_SIZE_X - 0.5) * (2.0 * HexMetrics.INNER_RADIUS)
-	pos.x = clampf(pos.x, 0.0, x_max)
-	
-	var z_max: float = (hex_grid.chunk_count_z * HexMetrics.CHUNK_SIZE_Z - 1.0) * (1.5 * HexMetrics.OUTER_RADIUS)
-	pos.z = clampf(pos.z, 0.0, z_max)
-	
-	return pos
+#func _clamp_position (pos: Vector3) -> Vector3:
+	#var x_max: float = (hex_grid.chunk_count_x * HexMetrics.CHUNK_SIZE_X - 0.5) * (2.0 * HexMetrics.INNER_RADIUS)
+	#pos.x = clampf(pos.x, 0.0, x_max)
+	#
+	#var z_max: float = (hex_grid.chunk_count_z * HexMetrics.CHUNK_SIZE_Z - 1.0) * (1.5 * HexMetrics.OUTER_RADIUS)
+	#pos.z = clampf(pos.z, 0.0, z_max)
+	#
+	#return pos
 
 func _adjust_rotation (rotation_delta: float, time_delta: float) -> void:
 	_rotation_angle += rotation_delta * rotation_speed * time_delta

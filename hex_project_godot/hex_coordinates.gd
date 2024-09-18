@@ -47,7 +47,7 @@ func ToStringOnSeparateLines () -> String:
 
 static func FromOffsetCoordinates (x: int, z: int) -> HexCoordinates:
 	#Static function to construct a HexCoordinates object from a set of offset coordinates
-	return HexCoordinates.new(x - (z/2), z)
+	return HexCoordinates.new(x - int(z / 2.0), z)
 	
 static func FromPosition(position: Vector3) -> HexCoordinates:
 	#This function determines hex coordinates from a Vector3 position within the local hex grid

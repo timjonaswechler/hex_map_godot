@@ -29,7 +29,7 @@ const HORIZONTAL_TERRACE_STEP_SIZE: float = 1.0 / float(TERRACE_STEPS)
 
 const VERTICAL_TERRACE_STEP_SIZE: float = 1.0 / float(TERRACES_PER_SLOPE + 1)
 
-const CELL_PERTURB_STRENGTH: float = 0.1
+const CELL_PERTURB_STRENGTH: float = 0.0
 
 const CELL_PERTURB_POSITION_MULTIPLIER: float = 100.0
 
@@ -101,7 +101,7 @@ static func terrace_lerp (a: Vector3, b: Vector3, step: int) -> Vector3:
 	
 	#It is important for the first part of this equation to be integer
 	#division, otherwise this does not work properly
-	var v = ((step + 1) / 2) * VERTICAL_TERRACE_STEP_SIZE
+	var v = ((step + 1.0) / 2.0) * VERTICAL_TERRACE_STEP_SIZE
 	a.y += (b.y - a.y) * v
 	
 	return a
